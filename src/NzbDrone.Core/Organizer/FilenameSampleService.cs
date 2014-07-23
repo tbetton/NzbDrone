@@ -76,28 +76,28 @@ namespace NzbDrone.Core.Organizer
             _singleEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
+                RelativePath = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
                 ReleaseGroup = "RlsGrp"
             };
 
             _multiEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
+                RelativePath = "Series.Title.S01E01-E02.720p.HDTV.x264-EVOLVE.mkv",
                 ReleaseGroup = "RlsGrp"
             };
 
             _dailyEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
+                RelativePath = "Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
                 ReleaseGroup = "RlsGrp"
             };
 
             _animeEpisodeFile = new EpisodeFile
             {
                 Quality = new QualityModel(Quality.HDTV720p),
-                Path = @"C:\Test\Series.Title.001.HDTV.x264-EVOLVE.mkv",
+                RelativePath = "Series.Title.001.HDTV.x264-EVOLVE.mkv",
                 ReleaseGroup = "RlsGrp"
             };
         }

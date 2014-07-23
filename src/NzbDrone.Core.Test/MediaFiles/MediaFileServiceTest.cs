@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.MediaFiles
@@ -13,6 +15,17 @@ namespace NzbDrone.Core.Test.MediaFiles
     [TestFixture]
     public class MediaFileServiceTest : CoreTest<MediaFileService>
     {
+        private Series _series;
+
+        [SetUp]
+        public void Setup()
+        {
+            _series = new Series
+                      {
+                          Id = 10,
+                          Path = @"C:\".AsOsAgnostic()
+                      };
+        }
 
         [Test]
         [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV-720p]",
@@ -37,7 +50,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Returns(new List<EpisodeFile>());
 
 
-            Subject.FilterExistingFiles(files, 10).Should().BeEquivalentTo(files);
+            Subject.FilterExistingFiles(files, _series).Should().BeEquivalentTo(files);
         }
 
 
@@ -53,10 +66,10 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IMediaFileRepository>()
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(files.Select(f => new EpisodeFile { Path = f }).ToList());
+                .Returns(files.Select(f => new EpisodeFile { RelativePath = Path.GetFileName(f) }).ToList());
 
 
-            Subject.FilterExistingFiles(files, 10).Should().BeEmpty();
+            Subject.FilterExistingFiles(files, _series).Should().BeEmpty();
         }
 
         [Test]
@@ -73,12 +86,12 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{Path = "c:\\file2.avi".AsOsAgnostic()}
+                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
                 });
 
 
-            Subject.FilterExistingFiles(files, 10).Should().HaveCount(2);
-            Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
+            Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
+            Subject.FilterExistingFiles(files, _series).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
         }
 
         [Test]
@@ -97,12 +110,12 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{Path = "c:\\file2.avi".AsOsAgnostic()}
+                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
                 });
 
 
-            Subject.FilterExistingFiles(files, 10).Should().HaveCount(2);
-            Subject.FilterExistingFiles(files, 10).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
+            Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
+            Subject.FilterExistingFiles(files, _series).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
         }
 
         [Test]
@@ -121,10 +134,10 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>
                 {
-                    new EpisodeFile{Path = "c:\\file2.avi".AsOsAgnostic()}
+                    new EpisodeFile{ RelativePath = "file2.avi".AsOsAgnostic()}
                 });
 
-            Subject.FilterExistingFiles(files, 10).Should().HaveCount(3);
+            Subject.FilterExistingFiles(files, _series).Should().HaveCount(3);
         }
 
         [Test]
@@ -139,9 +152,9 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
                 .Returns(new List<EpisodeFile>());
 
-            Subject.FilterExistingFiles(files, 10).Should().HaveCount(1);
-            Subject.FilterExistingFiles(files, 10).Should().NotContain(files.First().ToLower());
-            Subject.FilterExistingFiles(files, 10).Should().Contain(files.First());
+            Subject.FilterExistingFiles(files, _series).Should().HaveCount(1);
+            Subject.FilterExistingFiles(files, _series).Should().NotContain(files.First().ToLower());
+            Subject.FilterExistingFiles(files, _series).Should().Contain(files.First());
         }
     }
 }

@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         public void should_only_contain_episodes_for_the_given_series()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                                                  .With(f => f.Path = "another path")
+                                                  .With(f => f.RelativePath = "another path")
                                                   .BuildNew();
 
             Db.Insert(episodeFile);

@@ -50,7 +50,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             var episodes = _episodeService.GetEpisodesByFileId(episodeFile.Id);
             var newFileName = _buildFileNames.BuildFilename(episodes, series, episodeFile);
-            var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            var filePath = _buildFileNames.BuildFilePath(series, episodes.First().SeasonNumber, newFileName, Path.GetExtension(episodeFile.RelativePath));
 
             _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
             
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
-            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.RelativePath));
 
             _logger.Debug("Moving episode file: {0} to {1}", episodeFile, filePath);
             
@@ -70,7 +70,7 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var newFileName = _buildFileNames.BuildFilename(localEpisode.Episodes, localEpisode.Series, episodeFile);
-            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.Path));
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Series, localEpisode.SeasonNumber, newFileName, Path.GetExtension(episodeFile.RelativePath));
 
             _logger.Debug("Copying episode file: {0} to {1}", episodeFile, filePath);
 
@@ -83,14 +83,16 @@ namespace NzbDrone.Core.MediaFiles
             Ensure.That(series,() => series).IsNotNull();
             Ensure.That(destinationFilename, () => destinationFilename).IsValidPath();
 
-            if (!_diskProvider.FileExists(episodeFile.Path))
+            var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+
+            if (!_diskProvider.FileExists(episodeFilePath))
             {
-                throw new FileNotFoundException("Episode file path does not exist", episodeFile.Path);
+                throw new FileNotFoundException("Episode file path does not exist", episodeFilePath);
             }
 
-            if (episodeFile.Path.PathEquals(destinationFilename))
+            if (episodeFilePath.PathEquals(destinationFilename))
             {
-                throw new SameFilenameException("File not moved, source and destination are the same", episodeFile.Path);
+                throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
             var directoryName = new FileInfo(destinationFilename).DirectoryName;
@@ -116,15 +118,15 @@ namespace NzbDrone.Core.MediaFiles
 
             if (copyOnly)
             {
-                _logger.Debug("Copying [{0}] > [{1}]", episodeFile.Path, destinationFilename);
-                _diskProvider.CopyFile(episodeFile.Path, destinationFilename);
+                _logger.Debug("Copying [{0}] > [{1}]", episodeFilePath, destinationFilename);
+                _diskProvider.CopyFile(episodeFilePath, destinationFilename);
             }
             else
             {
-                _logger.Debug("Moving [{0}] > [{1}]", episodeFile.Path, destinationFilename);
-                _diskProvider.MoveFile(episodeFile.Path, destinationFilename);
+                _logger.Debug("Moving [{0}] > [{1}]", episodeFilePath, destinationFilename);
+                _diskProvider.MoveFile(episodeFilePath, destinationFilename);
             }
-            episodeFile.Path = destinationFilename;
+            episodeFilePath = series.Path.GetRelativePath(destinationFilename);
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
 
