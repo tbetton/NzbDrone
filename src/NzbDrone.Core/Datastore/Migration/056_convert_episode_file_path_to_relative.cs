@@ -5,7 +5,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(54)]
+    [Migration(56)]
     public class convert_episode_file_path_to_relative : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()

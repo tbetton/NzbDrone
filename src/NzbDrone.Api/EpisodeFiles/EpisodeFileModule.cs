@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
+using NzbDrone.Api.Episodes;
 using NzbDrone.Api.REST;
-using NzbDrone.Common;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Api.Mapping;
@@ -40,7 +41,10 @@ namespace NzbDrone.Api.EpisodeFiles
 
         private EpisodeFileResource GetEpisodeFile(int id)
         {
-            return _mediaFileService.Get(id).InjectTo<EpisodeFileResource>();
+            var episodeFile = _mediaFileService.Get(id);
+            var series = _seriesService.GetSeries(episodeFile.SeriesId);
+
+            return MapToResource(series, episodeFile);
         }
 
         private List<EpisodeFileResource> GetEpisodeFiles()
@@ -52,7 +56,10 @@ namespace NzbDrone.Api.EpisodeFiles
                 throw new BadRequestException("seriesId is missing");
             }
 
-            return ToListResource(() => _mediaFileService.GetFilesBySeries(seriesId.Value));
+            var series = _seriesService.GetSeries(seriesId.Value);
+
+            return _mediaFileService.GetFilesBySeries(seriesId.Value)
+                                    .Select(f => MapToResource(series, f)).ToList();
         }
 
         private void SetQuality(EpisodeFileResource episodeFileResource)
@@ -71,6 +78,14 @@ namespace NzbDrone.Api.EpisodeFiles
             _logger.Info("Deleting episode file: {0}", fullPath);
             _recycleBinProvider.DeleteFile(fullPath);
             _mediaFileService.Delete(episodeFile);
+        }
+
+        private static EpisodeFileResource MapToResource(Core.Tv.Series series, EpisodeFile episodeFile)
+        {
+            var resource = episodeFile.InjectTo<EpisodeFileResource>();
+            resource.Path = Path.Combine(series.Path, episodeFile.RelativePath);
+
+            return resource;
         }
 
         public void Handle(EpisodeFileAddedEvent message)
