@@ -64,6 +64,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
             _episodeFile.Quality.Proper = true;
         }
 
+
+
         [Test]
         public void should_replace_Series_space_Title()
         {

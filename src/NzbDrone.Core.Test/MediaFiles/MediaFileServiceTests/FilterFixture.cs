@@ -10,10 +10,10 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.MediaFiles
+namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
 {
     [TestFixture]
-    public class MediaFileServiceTest : CoreTest<MediaFileService>
+    public class FilterFixture : CoreTest<MediaFileService>
     {
         private Series _series;
 
@@ -28,21 +28,13 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        [TestCase("Law & Order: Criminal Intent - S10E07 - Icarus [HDTV-720p]",
-            "Law & Order- Criminal Intent - S10E07 - Icarus [HDTV-720p]")]
-        public void CleanFileName(string name, string expectedName)
-        {
-            FileNameBuilder.CleanFilename(name).Should().Be(expectedName);
-        }
-
-        [Test]
         public void filter_should_return_all_files_if_no_existing_files()
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi".AsOsAgnostic(),
-                "c:\\file2.avi".AsOsAgnostic(),
-                "c:\\file3.avi".AsOsAgnostic()
+                "C:\\file1.avi".AsOsAgnostic(),
+                "C:\\file2.avi".AsOsAgnostic(),
+                "C:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -53,15 +45,14 @@ namespace NzbDrone.Core.Test.MediaFiles
             Subject.FilterExistingFiles(files, _series).Should().BeEquivalentTo(files);
         }
 
-
         [Test]
         public void filter_should_return_none_if_all_files_exist()
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi".AsOsAgnostic(),
-                "c:\\file2.avi".AsOsAgnostic(),
-                "c:\\file3.avi".AsOsAgnostic()
+                "C:\\file1.avi".AsOsAgnostic(),
+                "C:\\file2.avi".AsOsAgnostic(),
+                "C:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -77,9 +68,9 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             var files = new List<string>()
             {
-                "c:\\file1.avi".AsOsAgnostic(),
-                "c:\\file2.avi".AsOsAgnostic(),
-                "c:\\file3.avi".AsOsAgnostic()
+                "C:\\file1.avi".AsOsAgnostic(),
+                "C:\\file2.avi".AsOsAgnostic(),
+                "C:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -91,7 +82,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
-            Subject.FilterExistingFiles(files, _series).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
+            Subject.FilterExistingFiles(files, _series).Should().NotContain("C:\\file2.avi".AsOsAgnostic());
         }
 
         [Test]
@@ -101,9 +92,9 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var files = new List<string>()
             {
-                "c:\\file1.avi".AsOsAgnostic(),
-                "c:\\FILE2.avi".AsOsAgnostic(),
-                "c:\\file3.avi".AsOsAgnostic()
+                "C:\\file1.avi".AsOsAgnostic(),
+                "C:\\FILE2.avi".AsOsAgnostic(),
+                "C:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -115,7 +106,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(2);
-            Subject.FilterExistingFiles(files, _series).Should().NotContain("c:\\file2.avi".AsOsAgnostic());
+            Subject.FilterExistingFiles(files, _series).Should().NotContain("C:\\file2.avi".AsOsAgnostic());
         }
 
         [Test]
@@ -125,9 +116,9 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             var files = new List<string>()
             {
-                "c:\\file1.avi".AsOsAgnostic(),
-                "c:\\FILE2.avi".AsOsAgnostic(),
-                "c:\\file3.avi".AsOsAgnostic()
+                "C:\\file1.avi".AsOsAgnostic(),
+                "C:\\FILE2.avi".AsOsAgnostic(),
+                "C:\\file3.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
@@ -145,7 +136,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         {
             var files = new List<string>()
             {
-                "c:\\FILE1.avi".AsOsAgnostic()
+                "C:\\FILE1.avi".AsOsAgnostic()
             };
 
             Mocker.GetMock<IMediaFileRepository>()
