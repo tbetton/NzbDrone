@@ -83,7 +83,7 @@ namespace NzbDrone.Core.MediaFiles
             Ensure.That(series,() => series).IsNotNull();
             Ensure.That(destinationFilename, () => destinationFilename).IsValidPath();
 
-            var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+            var episodeFilePath = episodeFile.Path ?? Path.Combine(series.Path, episodeFile.RelativePath);
 
             if (!_diskProvider.FileExists(episodeFilePath))
             {
@@ -126,7 +126,8 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.Debug("Moving [{0}] > [{1}]", episodeFilePath, destinationFilename);
                 _diskProvider.MoveFile(episodeFilePath, destinationFilename);
             }
-            episodeFilePath = series.Path.GetRelativePath(destinationFilename);
+
+            episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilename);
 
             _updateEpisodeFileService.ChangeFileDateForFile(episodeFile, series, episodes);
 

@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                                      .Build();
 
             _episodeFile = Builder<EpisodeFile>.CreateNew()
+                                               .With(f => f.Path = null)
                                                .With(f => f.RelativePath = @"Season 1\File.avi")
                                                .Build();
 

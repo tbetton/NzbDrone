@@ -44,7 +44,7 @@ namespace NzbDrone.Core.MediaFiles
             foreach (var existingFile in existingFiles)
             {
                 var file = existingFile.First();
-                var episodeFilePath = Path.Combine(localEpisode.Series.Path, episodeFile.RelativePath);
+                var episodeFilePath = Path.Combine(localEpisode.Series.Path, file.RelativePath);
 
                 if (_diskProvider.FileExists(episodeFilePath))
                 {
