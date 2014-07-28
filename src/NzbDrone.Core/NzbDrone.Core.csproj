@@ -212,8 +212,8 @@
     <Compile Include="Datastore\Migration\053_add_series_sorttitle.cs" />
     <Compile Include="Datastore\Migration\054_rename_profiles.cs" />
     <Compile Include="Datastore\Migration\055_drop_old_profile_columns.cs" />
-    <Compile Include="Datastore\Migration\056_convert_episode_file_path_to_relative.cs" />
-    <Compile Include="Datastore\Migration\057_drop_epsiode_file_path.cs" />
+    <Compile Include="Datastore\Migration\057_convert_episode_file_path_to_relative.cs" />
+    <Compile Include="Datastore\Migration\058_drop_epsiode_file_path.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
