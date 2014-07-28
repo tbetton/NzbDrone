@@ -10,12 +10,12 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-//            Create.Column("RelativePath").OnTable("EpisodeFiles").AsString().Nullable();
+            Create.Column("RelativePath").OnTable("EpisodeFiles").AsString().Nullable();
 
             //TODO: Add unique contraint for series ID and Relative Path
             //TODO: Warn if multiple series share the same path
 
-//            Execute.WithConnection(UpdateRelativePaths);
+            Execute.WithConnection(UpdateRelativePaths);
         }
 
         private void UpdateRelativePaths(IDbConnection conn, IDbTransaction tran)
