@@ -264,6 +264,7 @@
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\EpisodesWithoutFilesFixture.cs" />
     <Compile Include="TvTests\EpisodeRepositoryTests\FindEpisodeFixture.cs" />
+    <Compile Include="TvTests\MoveSeriesServiceFixture.cs" />
     <Compile Include="TvTests\RefreshEpisodeServiceFixture.cs" />
     <Compile Include="TvTests\RefreshSeriesServiceFixture.cs" />
     <Compile Include="TvTests\SeriesRepositoryTests\SeriesRepositoryFixture.cs" />

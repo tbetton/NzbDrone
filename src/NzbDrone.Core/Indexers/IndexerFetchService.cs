@@ -6,7 +6,6 @@ using NzbDrone.Common;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser.Model;
 using System.Linq;
 

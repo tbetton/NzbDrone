@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Instrumentation.Extensions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;

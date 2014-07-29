@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Common.Instrumentation.Extensions;
 
 namespace NzbDrone.Common.Disk
 {
@@ -190,7 +191,7 @@ namespace NzbDrone.Common.Disk
             Ensure.That(source, () => source).IsValidPath();
             Ensure.That(target, () => target).IsValidPath();
 
-            Logger.Debug("{0} {1} -> {2}", transferAction, source, target);
+            Logger.ProgressDebug("{0} {1} -> {2}", transferAction, source, target);
 
             var sourceFolder = new DirectoryInfo(source);
             var targetFolder = new DirectoryInfo(target);
@@ -209,7 +210,7 @@ namespace NzbDrone.Common.Disk
             {
                 var destFile = Path.Combine(target, sourceFile.Name);
 
-                Logger.Debug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
+                Logger.ProgressDebug("{0} {1} -> {2}", transferAction, sourceFile, destFile);
 
                 switch (transferAction)
                 {

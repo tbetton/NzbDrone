@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common;
-using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
